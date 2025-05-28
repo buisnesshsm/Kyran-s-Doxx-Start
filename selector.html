@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Kyran's Doxx</title>
+<style>
+  body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background: black;
+    overflow: hidden;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  header {
+    text-align: center;
+    margin-top: 30px;
+    z-index: 10;
+    user-select: none;
+  }
+
+  header h1 {
+    margin: 0;
+    font-size: 3rem;
+    font-weight: bold;
+  }
+
+  header p {
+    margin: 0;
+    font-size: 1.2rem;
+    font-style: italic;
+    opacity: 0.7;
+  }
+
+  .button-container {
+    margin-top: 50px;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+  }
+
+  button {
+    width: 300px;
+    padding: 15px 0;
+    font-size: 1.2rem;
+    border-radius: 15px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    background-color: rgba(30, 30, 30, 0.6);
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+  }
+
+  button:hover {
+    background-color: rgba(80, 80, 80, 0.8);
+    border-color: rgba(255, 255, 255, 0.7);
+  }
+
+  canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 1;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Kyran's Doxx</h1>
+  <p>made by Rezzy</p>
+</header>
+
+<div class="button-container">
+  <button onclick="window.location.href='https://buisnesshsm.github.io/Kyran-s-Doxx/'">Website</button>
+  <button onclick="window.location.href='https://cdn.discordapp.com/attachments/1373756381727035435/1377119924282982490/Scruffy_Pics.zip?ex=6837ce5f&is=68367cdf&hm=adbfd99a9d8a33fecfe9c38485ea62527cbb0e73c97d0fc9c4e3d6f7621ff901&'">Download Images</button>
+</div>
+
+<canvas id="snow"></canvas>
+
+<script>
+  const canvas = document.getElementById('snow');
+  const ctx = canvas.getContext('2d');
+  let width = window.innerWidth;
+  let height = window.innerHeight;
+  canvas.width = width;
+  canvas.height = height;
+
+  class Snowflake {
+    constructor() {
+      this.reset();
+    }
+    reset() {
+      this.x = Math.random() * width;
+      this.y = Math.random() * height;
+      this.radius = Math.random() * 2 + 1;
+      this.speed = Math.random() * 1 + 0.5;
+      this.wind = (Math.random() - 0.5) * 0.5;
+      this.opacity = Math.random() * 0.8 + 0.2;
+    }
+    update() {
+      this.y += this.speed;
+      this.x += this.wind;
+
+      if (this.y > height) {
+        this.y = 0;
+        this.x = Math.random() * width;
+      }
+      if (this.x > width) this.x = 0;
+      if (this.x < 0) this.x = width;
+    }
+    draw() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+      ctx.fill();
+    }
+  }
+
+  const snowflakes = [];
+  const SNOWFLAKE_COUNT = 150;
+
+  for (let i = 0; i < SNOWFLAKE_COUNT; i++) {
+    snowflakes.push(new Snowflake());
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, width, height);
+    snowflakes.forEach(flake => {
+      flake.update();
+      flake.draw();
+    });
+    requestAnimationFrame(animate);
+  }
+
+  animate();
+
+  window.addEventListener('resize', () => {
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = width;
+    canvas.height = height;
+  });
+</script>
+
+</body>
+</html>
